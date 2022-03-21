@@ -1,8 +1,14 @@
+import { Menu } from "../models/Menu.js";
 import { MonAn } from "../models/MonAn.js"
 import { DANH_SACH_MON_AN } from "../util/settings.js";
 
 
-let mangMonAn = [];
+let menu = new Menu();
+menu.layLocalStorage();
+//menu.danhSachMonAn = [{},{},{}]
+
+console.log('menu',menu);
+
 
 document.querySelector('#btnThemMon').onclick = () => {
     let monAn = new MonAn();
@@ -21,7 +27,7 @@ document.querySelector('#btnThemMon').onclick = () => {
     for (let key in monAn) {
 
         switch (key) {
-            case 'hinhAnh' : {
+            case 'hinhAnh': {
                 htmlLiContent += `
                     <li id="${key}" class="list-group-item d-flex justify-content-between lh-condensed">
                         <div class="w-75">
@@ -30,8 +36,8 @@ document.querySelector('#btnThemMon').onclick = () => {
                         <img src="${monAn[key]}" alt="..." width="w-25" height="50"  />
                     </li>
                 `
-            };break;
-            case 'maTinhTrang' : {
+            }; break;
+            case 'maTinhTrang': {
                 htmlLiContent += `
                     <li id="${key}" class="list-group-item d-flex justify-content-between lh-condensed">
                         <div>
@@ -40,8 +46,8 @@ document.querySelector('#btnThemMon').onclick = () => {
                         <span id="spMa" class="text-muted">${monAn[key] == '0' ? 'Hết' : 'Còn'}</span>
                     </li>
                 `
-            };break;
-            case 'loaiMon' : {
+            }; break;
+            case 'loaiMon': {
                 htmlLiContent += `
                     <li id="${key}" class="list-group-item d-flex justify-content-between lh-condensed">
                         <div>
@@ -50,6 +56,14 @@ document.querySelector('#btnThemMon').onclick = () => {
                         <span id="spMa" class="text-muted">${monAn[key] === 'loai1' ? 'Chay' : 'Mặn'}</span>
                     </li>
                 `
+            }; break;
+            case 'tinhGiaKhuyenMai': {
+                htmlLiContent += `<li id="giaKhuyenMai" class="list-group-item d-flex justify-content-between lh-condensed">
+                <div>
+                    <h6 class="my-0">Giá khuyến mãi</h6>
+                </div>
+                <span id="spMa" class="text-muted">${monAn.tinhGiaKhuyenMai()}</span>
+            </li> `;
             };break;
             default: {
                 //Mỗi lần duyệt qua 1 thuộc tính tạo ra 1 thẻ li
@@ -65,35 +79,20 @@ document.querySelector('#btnThemMon').onclick = () => {
         }
     }
 
-    htmlLiContent += `<li id="giaKhuyenMai" class="list-group-item d-flex justify-content-between lh-condensed">
-        <div>
-            <h6 class="my-0">Giá khuyến mãi</h6>
-        </div>
-        <span id="spMa" class="text-muted">${monAn.tinhGiaKhuyenMai()}</span>
-    </li> `;
     //Dom đến thẻ ul trên giao diện để gán thông tin lên html của ul đó
     document.querySelector('#thongTinMonAn').innerHTML = htmlLiContent;
 
     //Lưu dữ liệu món ăn vào localstorage
-    mangMonAn.push(monAn);
-    luuMonAnStorage();
+    menu.themMonAn(monAn);
+    console.log('menu',menu);
+    menu.luuLocalStorage();
+    // luuMonAnStorage();
 }
 
 
 
 
-function luuMonAnStorage () {
 
-    let sMangMonAn = JSON.stringify(mangMonAn);
-    localStorage.setItem(DANH_SACH_MON_AN,sMangMonAn);
-}
 
-function layMonAnStorage() {
-    if(localStorage.getItem(DANH_SACH_MON_AN)){
-        let sMangMonAn = localStorage.getItem(DANH_SACH_MON_AN);
-        let mangMonAn = JSON.parse(sMangMonAn);
-        console.log('mangMonAn',mangMonAn)
-    }
-}
 
-layMonAnStorage();
+

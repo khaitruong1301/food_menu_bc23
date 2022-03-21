@@ -10,8 +10,10 @@ export class MonAn {
     constructor() {
 
     }
-    tinhGiaKhuyenMai() {
+    tinhGiaKhuyenMai = function () {
         let giaKM = this.giaMon - ( this.giaMon * this.khuyenMai / 100);
         return giaKM;
     }
 }
+
+
